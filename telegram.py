@@ -1,6 +1,6 @@
 from telebot import TeleBot
 from json import loads
-from re import search
+from re import match
 from models import Link, db
 
 with open("config.json") as f:
@@ -24,6 +24,8 @@ def link_handler(message):
             url = entity.url
     print(url is None)
     if url:
+        if not match(r"https?://", url):
+            url = "http://" + url
         link = Link(url)
         db.session.add(link)
         db.session.commit()
